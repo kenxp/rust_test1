@@ -61,5 +61,5 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         prerelease: true
-        files: artifacts/
+        files: artifacts/*
 
