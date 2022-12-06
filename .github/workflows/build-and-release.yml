@@ -2,6 +2,8 @@ name: Build-and-release
 
 on:
   workflow_dispatch:
+  release:
+    types: [published]
   push:
     tags:
       - "v*"
@@ -55,10 +57,13 @@ jobs:
           mkdir artifacts/
           mv target/${{ matrix.job.target }}/release/test1 artifacts/test1-${{ matrix.job.target }}
           
+    - name: echo info
+      run: |
+        echo ${{ github.ref }}
 
     - name: Release binaries
       uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
+      #if: startsWith(github.ref, 'refs/tags/')
       with:
         prerelease: true
         files: artifacts/*
