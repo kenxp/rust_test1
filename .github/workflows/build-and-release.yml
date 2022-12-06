@@ -6,7 +6,7 @@ on:
     types: [published]
   push:
     tags:
-      - "v*"
+      - "*"
 
 #env:
 #  CARGO_TERM_COLOR: always
