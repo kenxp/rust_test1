@@ -55,18 +55,11 @@ jobs:
           mkdir artifacts/
           mv target/${{ matrix.job.target }}/release/test1 artifacts/test1-${{ matrix.job.target }}
           
+
     - name: Release binaries
-      uses: ncipollo/release-action@v1
-      with:
-          artifacts: "artifacts/*"
-          tag: ${{ steps.tag.outputs.tag }}
-          name: ${{ steps.tag.outputs.tag }}
-          allowUpdates: true
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-    - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        prerelease: true
+        #prerelease: true
         files: artifacts/
 
