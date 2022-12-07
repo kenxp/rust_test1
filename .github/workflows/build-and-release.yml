@@ -79,6 +79,12 @@ jobs:
           mv target/${{ matrix.job.target }}/release/test1${{ matrix.job.file-ext }} artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
           ls -lla -h artifacts/*
 
+    - name: Replace Name
+      continue-on-error: true
+      shell: bash
+      run: |
+        echo ${{ github.ref }} ${{ env }}
+
     - name: Upx binaries linux
       continue-on-error: true
       if: startsWith(matrix.job.os, 'ubuntu')
@@ -88,6 +94,14 @@ jobs:
         tar xf upx-4.0.1-amd64_linux.tar.xz
         ./upx-4.0.1-amd64_linux/upx -9 artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
         ls -lla -h artifacts/*
+
+    - name: Upload-Artifact
+      continue-on-error: true
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: artifacts/
+        if-no-files-found: ignore # 'warn' or 'ignore' are also available, defaults to `warn`
 
     - name: Release binaries
       uses: softprops/action-gh-release@v1
