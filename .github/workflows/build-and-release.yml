@@ -62,7 +62,7 @@ jobs:
           profile: minimal # minimal component installation (ie, no documentation)
 
     - name: Install Rust cross
-      if: matrix.job.use-cross == 'true' && steps.cache-cargo.outputs.cache-hit != 'true'
+      if: matrix.job.use-cross ==true && steps.cache-cargo.outputs.cache-hit != 'true'
       uses: actions-rs/cargo@v1
       with:
         command: check
