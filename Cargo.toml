@@ -8,7 +8,8 @@ edition = "2021"
 [dependencies]
 
 [profile.release]
-opt-level = 'z'
+strip = true  # Automatically strip symbols from the binary.
 lto = true
 codegen-units = 1
-panic = 'abort'
+opt-level = "z" # Optimize for size
+panic = "abort"
