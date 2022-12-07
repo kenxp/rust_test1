@@ -62,15 +62,15 @@ jobs:
           override: true
           profile: minimal # minimal component installation (ie, no documentation)
 
-    - name: Install Rust cross
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Rust cross check
       if: matrix.job.use-cross ==true && steps.cache-cargo.outputs.cache-hit != 'true'
       uses: actions-rs/cargo@v1
       with:
         command: check
         use-cross: ${{ matrix.job.use-cross }}
-
-    - name: Checkout source code
-      uses: actions/checkout@v3
 
     - name: Build
       uses: actions-rs/cargo@v1
