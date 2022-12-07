@@ -38,8 +38,9 @@ jobs:
       shell: bash
       run: |
         echo ${{ github.ref }} ${{ toJSON(env) }}
+        docker info
 
-    - name: Cache Cargo
+    - name: Cache Cargo & Docker layers
       id: cache-cargo
       uses: actions/cache@v3
       with:
@@ -49,10 +50,10 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-          /var/lib/docker
+          /tmp/.buildx-cache
         key: cargo-${{ matrix.job.target }}-${{ matrix.job.target.use-cross }}
 
-    - name: Install Rust toolchain
+    - name: Install Rust Toolchain
       if: steps.cache-cargo.outputs.cache-hit != 'true'
       uses: actions-rs/toolchain@v1
       with:
@@ -112,3 +113,10 @@ jobs:
         #prerelease: true
         files: artifacts/*
 
+    # Temp fix
+    # https://github.com/docker/build-push-action/issues/252
+    # https://github.com/moby/buildkit/issues/1896
+    - name: Move cache
+      run: |
+        rm -rf /tmp/.buildx-cache
+        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
