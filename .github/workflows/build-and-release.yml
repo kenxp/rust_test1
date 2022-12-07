@@ -96,6 +96,7 @@ jobs:
         ls -lla -h artifacts/*
 
     - name: Upx binaries window
+      shell: bash
       continue-on-error: true
       if: startsWith(matrix.job.os, 'window')
       run: |
