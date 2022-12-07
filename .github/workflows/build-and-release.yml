@@ -53,6 +53,7 @@ jobs:
           use-cross: ${{ matrix.job.use-cross }}
 
     - name: show info
+      shell: bash
       run: |
         echo ${{ github.ref }} ${{ env.PROJECT_NAME }}
         if [[ "${{ matrix.job.os }}" = windows* ]];then
