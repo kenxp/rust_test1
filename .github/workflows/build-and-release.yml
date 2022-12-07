@@ -49,16 +49,17 @@ jobs:
           command: build
           args: --release --target ${{ matrix.job.target }}
           use-cross: ${{ matrix.job.use-cross }}
-          
-    - name: Move binaries
-      run: |
-          mkdir artifacts/
-          mv target/${{ matrix.job.target }}/release/test1${{ matrix.job.target }} artifacts/test1-${{ matrix.job.target }}${{ matrix.job.target }}
 
     - name: show info
       run: |
         echo ${{ github.ref }} ${{ env.PROJECT_NAME }}
-        ls -llah artifacts/
+        ls -lla -h artifacts/*
+
+    - name: Move binaries
+      run: |
+          mkdir artifacts/
+          mv target/${{ matrix.job.target }}/release/test1${{ matrix.job.file-ext }} artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
+
 
     - name: Release binaries
       uses: softprops/action-gh-release@v1
