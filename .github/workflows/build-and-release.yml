@@ -37,6 +37,7 @@ jobs:
       
     - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
+      if: startsWith(github.ref, 'xxxx')
       with:
           toolchain: stable
           target: ${{ matrix.job.target }}
@@ -45,6 +46,7 @@ jobs:
           
     - name: Build
       uses: actions-rs/cargo@v1
+      if: startsWith(github.ref, 'xxxx')
       with:
           command: build
           args: --release --target ${{ matrix.job.target }}
@@ -53,7 +55,12 @@ jobs:
     - name: show info
       run: |
         echo ${{ github.ref }} ${{ env.PROJECT_NAME }}
-        ls -lla -h artifacts/*
+        if [[ "${{ matrix.job.os }}" = windows* ]];then
+          ls artifacts/*
+        else
+          ls -lla -h artifacts/*
+        fi
+        
 
     - name: Move binaries
       run: |
