@@ -65,6 +65,6 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         generate_release_notes: true
-        prerelease: true
+        #prerelease: true
         files: artifacts/*
 
