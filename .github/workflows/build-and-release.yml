@@ -43,7 +43,7 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        key: cargo-${{ matrix.job.target }}
 
     - name: Install Rust toolchain
       if: steps.cache-cargo.outputs.cache-hit != 'true'
@@ -68,12 +68,14 @@ jobs:
       shell: bash
       run: |
         echo ${{ github.ref }} ${{ env.PROJECT_NAME }}
-        ls -lla -h artifacts/*
+
 
     - name: Move binaries
+      shell: bash
       run: |
           mkdir artifacts/
           mv target/${{ matrix.job.target }}/release/test1${{ matrix.job.file-ext }} artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
+          ls -lla -h artifacts/*
 
     - name: Upx binaries linux
       if: startsWith(matrix.job.os, 'ubuntu')
