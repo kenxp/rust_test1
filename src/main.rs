@@ -1,5 +1,5 @@
 fn main() {
-    let a="321";
+    let a = "321";
     println!("Hello, world!");
-    println!("hi {} %d %s {}",10, a)
+    println!("hi {} %d %s {}", 10, a)
 }

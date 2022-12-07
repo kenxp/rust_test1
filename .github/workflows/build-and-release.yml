@@ -18,18 +18,17 @@ jobs:
       fail-fast: false
       matrix:
         job:
-          #- { target: aarch64-unknown-linux-gnu     , os: ubuntu-20.04, use-cross: true }
           #- { target: aarch64-unknown-linux-musl    , os: ubuntu-20.04, use-cross: true }
-          #- { target: armv7-unknown-linux-gnueabihf , os: ubuntu-20.04, use-cross: true }
           #- { target: armv7-unknown-linux-musleabihf, os: ubuntu-20.04, use-cross: true }
-          - { target: mipsel-unknown-linux-gnu ,        os: ubuntu-20.04, use-cross: true }
-          - { target: mipsel-unknown-linux-musl,        os: ubuntu-20.04, use-cross: true }
+          #- { target: mipsel-unknown-linux-gnu ,        os: ubuntu-20.04, use-cross: true }
+          #- { target: mipsel-unknown-linux-musl,        os: ubuntu-20.04, use-cross: true }
           # - { target: i686-pc-windows-msvc        , os: windows-2019                  }
           # - { target: i686-unknown-linux-gnu      , os: ubuntu-20.04, use-cross: true }
           # - { target: i686-unknown-linux-musl     , os: ubuntu-20.04, use-cross: true }
           # - { target: x86_64-apple-darwin         , os: macos-10.15                   }
           # - { target: x86_64-pc-windows-gnu       , os: windows-2019                  }
           # - { target: x86_64-pc-windows-msvc        , os: windows-2019                  }
+          - { target: x86_64-pc-windows-msvc        , os: ubuntu-20.04, use-cross: true, file-ext: .exe}
           # - { target: x86_64-unknown-linux-gnu      , os: ubuntu-20.04                  }
           # - { target: x86_64-unknown-linux-musl     , os: ubuntu-20.04, use-cross: true }
     steps:
@@ -41,31 +40,31 @@ jobs:
       with:
           toolchain: stable
           target: ${{ matrix.job.target }}
-          default: true
           override: true
           profile: minimal # minimal component installation (ie, no documentation)
           
     - name: Build
       uses: actions-rs/cargo@v1
       with:
-          use-cross: ${{ matrix.job.use-cross }}
           command: build
           args: --release --target ${{ matrix.job.target }}
+          use-cross: ${{ matrix.job.use-cross }}
           
     - name: Move binaries
       run: |
           mkdir artifacts/
-          mv target/${{ matrix.job.target }}/release/test1 artifacts/test1-${{ matrix.job.target }}
+          mv target/${{ matrix.job.target }}/release/test1${{ matrix.job.target }} artifacts/test1-${{ matrix.job.target }}${{ matrix.job.target }}
 
     - name: show info
       run: |
-        echo ${{ github.ref }}
+        echo ${{ github.ref }} ${{ env.PROJECT_NAME }}
         ls -llah artifacts/
 
     - name: Release binaries
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        #prerelease: true
+        generate_release_notes: true
+        prerelease: true
         files: artifacts/*
 
