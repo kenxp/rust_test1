@@ -65,12 +65,14 @@ jobs:
           use-cross: ${{ matrix.job.use-cross }}
 
     - name: show info
+      continue-on-error: true
       shell: bash
       run: |
         echo ${{ github.ref }} ${{ env.PROJECT_NAME }}
 
 
     - name: Move binaries
+      continue-on-error: true
       shell: bash
       run: |
           mkdir artifacts/
@@ -78,12 +80,13 @@ jobs:
           ls -lla -h artifacts/*
 
     - name: Upx binaries linux
+      continue-on-error: true
       if: startsWith(matrix.job.os, 'ubuntu')
       run: |
         #wget https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip
-        wget https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-amd64_linux.tar.xz
+        wget -q https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-amd64_linux.tar.xz
         tar xf upx-4.0.1-amd64_linux.tar.xz
-        ./px-4.0.1-amd64_linux/upx -9 artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
+        ./upx-4.0.1-amd64_linux/upx -9 artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
         ls -lla -h artifacts/*
 
     - name: Release binaries
