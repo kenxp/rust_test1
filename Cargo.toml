@@ -44,7 +44,7 @@ panic = 'abort'
 # cross 交叉编译传递host参数到docker img
 [package.metadata.cross.build.env]
 passthrough = [
-    "RUST_BACKTRACE=1",
+    "RUST_BACKTRACE=full",
     "RUST_LOG",
     "TRAVIS",
     "CC_mipsel_unknown_linux_gnu=mipsel-linux-gnu-gcc",
