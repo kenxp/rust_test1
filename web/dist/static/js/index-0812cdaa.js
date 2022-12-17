@@ -1,0 +1,1 @@
+import{d as e,o as u,c as n}from"./index-2585ad14.js";const o=e({name:"Welcome"}),_=e({...o,setup(t){return(c,a)=>(u(),n("h1",null,"Pure-Admin-Thin\uFF08\u975E\u56FD\u9645\u5316\u7248\u672C\uFF09"))}});export{_ as default};

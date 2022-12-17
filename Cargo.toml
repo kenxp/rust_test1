@@ -1,15 +1,45 @@
 [package]
-name = "test1"
+name = "rust_vue"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["kenxp"]
 
 [dependencies]
+poem = { version = "1.3.50", features = ["embed"] } #"static-files", "embed", "compression", "multipart"
+tokio = { version = "1.23.0", features = ["rt-multi-thread", "macros", "signal"] }
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+rust-embed = "6.4.2"
+base64 = "0.20.0"
+serde_json = "1.0.87"
+serde_urlencoded = "0.7.1"
+#openapi
+poem-openapi = { version = "2.0.21", features = ["swagger-ui", "rapidoc", "redoc", "uuid", ] }
+
+#命令行解析
+clap = { version = "4.0.29", features = ["derive"] }
+
+#读取配置
+serde = { version = "1.0.149", features = ["derive"] }
+toml = "0.5.9"
+once_cell = "1.16.0"
+
+#数据库
+rbs = { version = "0.1.13" }
+rbatis = { version = "4.0.44", features = ["debug_mode"] }
+rbdc-sqlite = "0"
+rbdc-mysql = "0"
+rbdc-pg = "0"
+
+# logging(option)
+log = "0.4"
+fast_log = "1.5"
 
 [profile.release]
-strip = true  # Automatically strip symbols from the binary.
-lto = true
 codegen-units = 1
-opt-level = "z" # Optimize for size
-panic = "abort"
+debug = false
+strip = true
+lto = true
+opt-level = "z" # Optimize for size.
+panic = 'abort'
+
+

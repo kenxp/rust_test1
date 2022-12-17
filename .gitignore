@@ -1,2 +1,4 @@
 /target
-Cargo.lock
+/data/sqlite.db-shm
+/data/sqlite.db-wal
+/.vscode/
