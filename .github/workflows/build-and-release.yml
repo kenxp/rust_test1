@@ -72,6 +72,9 @@ jobs:
         run:
           #export TARGET_CC=${{ matrix.job.target }}-gcc
           #export TARGET_AR=${{ matrix.job.target }}-ar
+          export CC_mipsel_unknown_linux_gnu=mipsel-linux-gnu-gcc
+          export AR_mipsel_unknown_linux_gnu=mipsel-linux-gnu-gcc-ar
+          export CARGO_TARGET_MIPSEL_UNKNOWN_LINUX_GNU_LINKER=mipsel-linux-gnu-gcc
           export RUST_BACKTRACE=1
           export
 
