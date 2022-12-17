@@ -7,8 +7,9 @@ on:
     tags:
       - "*"
 
-#env:
-#  CARGO_TERM_COLOR: always
+env:
+  CARGO_TERM_COLOR: always
+  APP_NAME: rust_vue #设置生产的运行程序名
 
 jobs:
   build:
@@ -33,85 +34,85 @@ jobs:
           # - { target: x86_64-unknown-linux-musl     , os: ubuntu-20.04, use-cross: true }
     steps:
 
-    - name: show info
-      continue-on-error: true
-      shell: bash
-      run: |
-        echo ${{ github.ref }} ${{ toJSON(env) }}
-        docker info
+      - name: show info
+        continue-on-error: true
+        shell: bash
+        run: |
+          echo 环境变量：${{ toJSON(env) }}
+          echo github变量：${{ toJSON(github) }}
 
-    - name: Cache Cargo & Docker layers
-      id: cache-cargo
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cargo/bin/
-          ~/.cargo/registry/index/
-          ~/.cargo/registry/cache/
-          ~/.cargo/git/db/
-          target/
-          /tmp/.buildx-cache
-        key: cargo-${{ matrix.job.target }}
+      - name: Cache Cargo & Docker layers
+        id: cache-cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+            /tmp/.buildx-cache
+          key: cargo-${{ matrix.job.target }}
 
-    - name: Install Rust Toolchain
-      if: steps.cache-cargo.outputs.cache-hit != 'true'
-      uses: actions-rs/toolchain@v1
-      with:
+      - name: Install Rust Toolchain
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        uses: actions-rs/toolchain@v1
+        with:
           toolchain: stable
           target: ${{ matrix.job.target }}
           override: true
           profile: minimal # minimal component installation (ie, no documentation)
 
-    - name: Checkout source code
-      uses: actions/checkout@v3
+      - name: Checkout source code
+        uses: actions/checkout@v3
 
-    - name: Build
-      uses: actions-rs/cargo@v1
-      with:
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
           command: build
           args: --release --target ${{ matrix.job.target }}
           use-cross: ${{ matrix.job.use-cross }}
 
-    - name: Move binaries
-      continue-on-error: true
-      shell: bash
-      run: |
+      - name: Move binaries
+        continue-on-error: true
+        shell: bash
+        run: |
           mkdir artifacts/
-          mv target/${{ matrix.job.target }}/release/test1${{ matrix.job.file-ext }} artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
+          mv target/${{ matrix.job.target }}/release/${{ matrix.job.use-cross }}${{ env.APP_NAME-ext }} artifacts/${{ env.APP_NAME-ext }}-${{ matrix.job.target }}${{ matrix.job.file-ext }}
           ls -lla -h artifacts/*
 
-    - name: Upx binaries linux
-      continue-on-error: true
-      if: startsWith(matrix.job.os, 'ubuntu')
-      run: |
-        #wget https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip
-        wget -q https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-amd64_linux.tar.xz
-        tar xf upx-4.0.1-amd64_linux.tar.xz
-        ./upx-4.0.1-amd64_linux/upx -9 artifacts/test1-${{ matrix.job.target }}${{ matrix.job.file-ext }}
-        ls -lla -h artifacts/*
+      - name: Upx binaries linux
+        continue-on-error: true
+        if: startsWith(matrix.job.os, 'ubuntu')
+        run: |
+          #wget https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip
+          wget -q https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-amd64_linux.tar.xz
+          tar xf upx-4.0.1-amd64_linux.tar.xz
+          ./upx-4.0.1-amd64_linux/upx -9 artifacts/${{ env.APP_NAME-ext }}-${{ matrix.job.target }}${{ matrix.job.file-ext }}
+          ls -lla -h artifacts/*
 
-    - name: Upload-Artifact
-      continue-on-error: true
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.job.target }}
-        path: artifacts/
-        if-no-files-found: ignore # 'warn' or 'ignore' are also available, defaults to `warn`
+      - name: Upload-Artifact
+        continue-on-error: true
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.job.target }}
+          path: artifacts/
+          if-no-files-found: ignore # 'warn' or 'ignore' are also available, defaults to `warn`
 
-    - name: Release binaries
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        generate_release_notes: true
-        #prerelease: true
-        files: artifacts/*
+      - name: Release binaries
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          generate_release_notes: true
+          #prerelease: true
+          files: artifacts/*
 
-    # Temp fix
-    # https://github.com/docker/build-push-action/issues/252
-    # https://github.com/moby/buildkit/issues/1896
-    - name: Move cache
-      continue-on-error: true
-      shell: bash
-      run: |
-        rm -rf /tmp/.buildx-cache
-        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        continue-on-error: true
+        shell: bash
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache

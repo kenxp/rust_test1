@@ -2,3 +2,4 @@
 /data/sqlite.db-shm
 /data/sqlite.db-wal
 /.vscode/
+/Cargo.lock
