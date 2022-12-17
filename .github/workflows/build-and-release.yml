@@ -9,6 +9,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
   APP_NAME: rust_vue #设置生产的运行程序名
 
 jobs:
