@@ -24,11 +24,10 @@ toml = "0.5.9"
 once_cell = "1.16.0"
 
 #数据库
-rbs = { version = "0.1.13" }
 rbatis = { version = "4.0.44", features = ["debug_mode"] }
+rbs = { version = "0.1.13" }
 rbdc-sqlite = "0"
-rbdc-mysql = "0"
-rbdc-pg = "0"
+
 
 # logging(option)
 log = "0.4"
@@ -41,5 +40,15 @@ strip = true
 lto = true
 opt-level = "z" # Optimize for size.
 panic = 'abort'
+
+# cross 交叉编译传递host参数到docker img
+[package.metadata.cross.build.env]
+passthrough = [
+    "RUST_BACKTRACE=1",
+    "RUST_LOG",
+    "TRAVIS",
+    "CC_mipsel_unknown_linux_gnu=mipsel-linux-gnu-gcc",
+    "AR_mipsel_unknown_linux_gnu=mipsel-linux-gnu-gcc-ar",
+]
 
 
