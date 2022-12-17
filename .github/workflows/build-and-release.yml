@@ -82,7 +82,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target ${{ matrix.job.target }}
+          args: --release --target ${{ matrix.job.target }} --verbose
           use-cross: ${{ matrix.job.use-cross }}
 
       - name: Move binaries

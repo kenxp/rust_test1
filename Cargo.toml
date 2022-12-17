@@ -45,10 +45,6 @@ panic = 'abort'
 [package.metadata.cross.build.env]
 passthrough = [
     "RUST_BACKTRACE=full",
-    "RUST_LOG",
-    "TRAVIS",
-    "CC_mipsel_unknown_linux_gnu=mipsel-linux-gnu-gcc",
-    "AR_mipsel_unknown_linux_gnu=mipsel-linux-gnu-gcc-ar",
 ]
 
 
