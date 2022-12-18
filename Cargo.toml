@@ -46,13 +46,20 @@ panic = 'abort'
 
 
 # patch 不定 ring 用最新github master版本
-[patch.crates-io]
-ring = { git = "https://github.com/briansmith/ring" }
+#[patch.crates-io]
+#ring = { git = "https://github.com/briansmith/ring" }
+#ring = { path = "./ring" }
+
+
+
+
 
 # cross 交叉编译传递host参数到docker img
 [package.metadata.cross.build.env]
 passthrough = [
-    "RUST_BACKTRACE=full"
+    "RUST_BACKTRACE=full",
+    #"RUSTFLAGS='-C target-cpu=mips32r2'",
+    #"RUSTFLAGS='-C target-feature=+crt-static'",
 ]
 
 
