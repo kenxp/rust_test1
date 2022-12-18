@@ -33,6 +33,9 @@ rbdc-sqlite = "0"
 log = "0.4"
 fast_log = "1.5"
 
+
+
+
 [profile.release]
 codegen-units = 1
 debug = false
@@ -41,10 +44,15 @@ lto = true
 opt-level = "z" # Optimize for size.
 panic = 'abort'
 
+
+# patch 不定 ring 用最新github master版本
+[patch.crates-io]
+ring = { git = "https://github.com/briansmith/ring" }
+
 # cross 交叉编译传递host参数到docker img
 [package.metadata.cross.build.env]
 passthrough = [
-    "RUST_BACKTRACE=full",
+    "RUST_BACKTRACE=full"
 ]
 
 

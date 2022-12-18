@@ -1,8 +1,8 @@
 use log::{info, warn};
 use rbatis::{crud, impl_select_page, Rbatis};
 //use rbdc_mssql::driver::MssqlDriver;
-use rbdc_mysql::driver::MysqlDriver;
-use rbdc_pg::driver::PgDriver;
+//use rbdc_mysql::driver::MysqlDriver;
+//use rbdc_pg::driver::PgDriver;
 use rbdc_sqlite::driver::SqliteDriver;
 
 use crate::model::entity::*;
@@ -19,15 +19,15 @@ pub fn init_db(db_source: &str) -> Rbatis {
         warn!(r#"Rbatis正在使用debug模式！Release请修改Cargo.toml 中debug配置项为  debug: false"#);
     }
     /// connect to database
-    //rb.init(SqliteDriver {}, "sqlite://data/sqlite.db").unwrap();
+    rb.init(SqliteDriver {}, "sqlite://data/sqlite.db").unwrap();
     // mysql
     //rb.init(MysqlDriver {}, "mysql://root:abcd1234@localhost:3306/rust_test").unwrap();
     // postgresql
-    rb.init(
-        PgDriver {},
-        "postgres://root:abcd1234@localhost:5432/postgres",
-    )
-    .unwrap();
+    // rb.init(
+    //     PgDriver {},
+    //     "postgres://root:abcd1234@localhost:5432/postgres",
+    // )
+    // .unwrap();
 
     info!(
         "pool status: {:?}",
